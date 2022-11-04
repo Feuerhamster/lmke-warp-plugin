@@ -1,0 +1,6 @@
+# ----------------------
+# lmke Warp Configuration
+# ----------------------
+
+# Change the language of the messages (eg. select what message file to use)
+locale: 'de'

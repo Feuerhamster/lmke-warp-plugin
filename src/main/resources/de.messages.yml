@@ -1,0 +1,22 @@
+common:
+  prefix: '§3lmke §6warps §8» §7'
+  header: '§7---[ §3lmke §6warps §7]---'
+
+errors:
+  missing_args: '§cFehler: Ein oder mehrere Argumente fehlen'
+  not_found: '§cFehler: Nicht gefunden'
+
+warp:
+  help:
+    - '§6/warp <name> §8- §7Teleporiere dich zu einem Warp-Punkt'
+    - '§6/warp list §8- §7Listet alle deine Warp-Punkte auf'
+    - '§6/warp create <name> §8- §7Erstelle einen neuen Warp-Punkt'
+    - '§6/warp delete <name> §8- §7Lösche einen Warp-Punkt'
+  created: '§aWarp-Punkt erstellt'
+  deleted: '§eWarp-Punkt entfernt'
+
+visit:
+  help:
+    - '§c/visit <name> §8- §7Teleporiere dich zu einem Besuchspunkt'
+    - '§c/visit create <name> §8- §7Erstelle einen neuen öffentlichen Besuchspunkt'
+    - '§c/visit delete <name> §8- §7Lösche einen Besuchspunkt'

@@ -1,0 +1,10 @@
+name: lmke-warps
+version: '${project.version}'
+main: dev.lmke.mc.warps.LMKEWarps
+api-version: 1.15
+description: Warp plugin with economy support
+website: lmke.dev
+commands:
+  warp:
+    usage: "/warp <create|delete|help|<name>>"
+    description: Warp command
