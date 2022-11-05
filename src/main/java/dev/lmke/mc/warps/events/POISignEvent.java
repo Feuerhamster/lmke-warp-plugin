@@ -1,13 +1,12 @@
 package dev.lmke.mc.warps.events;
 
+import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.LMKEWarps;
 import dev.lmke.mc.warps.database.DAL;
-import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,7 +16,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 
 import java.util.Objects;
 
@@ -29,11 +27,15 @@ public class POISignEvent implements Listener {
             return;
         }
 
+        if (!e.getPlayer().hasPermission("lmke-warps.sign.create")) {
+            e.getPlayer().sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
+            return;
+        }
+
         POIObject poi = DAL.getPOI(e.getLine(1));
 
         if (poi == null) {
-            e.setLine(0, "");
-            e.setLine(1, MessageLocaleManager.getConfig().getString("errors.not_found"));
+            e.getPlayer().sendMessage(MessageLocaleManager.getText("errors.not_found"));
             return;
         }
 
@@ -62,6 +64,11 @@ public class POISignEvent implements Listener {
         if (block == null) return;
 
         if (!block.getType().equals(Material.OAK_WALL_SIGN) || !action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
+        if (!player.hasPermission("lmke-warps.sign.use")) {
+            player.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
             return;
         }
 

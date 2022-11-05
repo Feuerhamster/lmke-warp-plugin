@@ -36,6 +36,8 @@ public class POICommand extends CommandBase {
         sender.sendMessage(header);
         sender.sendMessage(warps.toArray(new String[0]));
 
+        int poiCount = DAL.getPlayerPOICount(((Player) sender).getUniqueId());
+
         if (EconomyService.POIEconomyEnabled()) {
             double create = EconomyService.getPOICreatePrice();
             double delete = EconomyService.getPOIDeletePrice();
@@ -49,7 +51,22 @@ public class POICommand extends CommandBase {
 
             sender.sendMessage(String.format(locale.getString("poi.help_economy.create"), createPriceText));
             sender.sendMessage(String.format(locale.getString("poi.help_economy.delete"), deletePriceText));
-            sender.sendMessage(MessageLocaleManager.getText("common.limit") + ConfigManager.getConfig().getInt("warp.limit"));
+
+            int forFree = ConfigManager.getConfig().getInt("poi.for_free");
+
+            if (forFree > 0) {
+                int hasLeft = Math.max(forFree - poiCount, 0);
+
+                String msg = locale.getString("common.for_free") + hasLeft + "/" + forFree;
+                sender.sendMessage(msg);
+            }
+        }
+
+        int limit = ConfigManager.getConfig().getInt("poi.limit");
+
+        if (limit > 0) {
+            int hasLeft = Math.max(limit - poiCount, 0);
+            sender.sendMessage(String.format(locale.getString("common.limit"), hasLeft + "/" + limit));
         }
     }
 
@@ -86,7 +103,7 @@ public class POICommand extends CommandBase {
      */
     @SubCommand("list")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.list")
+    @HasPermission("lmke-warps.poi.list")
     public void list(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -138,14 +155,15 @@ public class POICommand extends CommandBase {
             return;
         }
 
-        if (DAL.getPlayerPOICount(p.getUniqueId()) >= ConfigManager.getConfig().getInt("poi.limit")) {
+        int poiCount = DAL.getPlayerPOICount(p.getUniqueId());
+        int limit = ConfigManager.getConfig().getInt("poi.limit");
+
+        if (poiCount >= limit && limit > 0 && !p.hasPermission("lmke-warps.bypass.limit")) {
             p.sendMessage(MessageLocaleManager.getText("errors.limit_reached"));
             return;
         }
 
-        // TODO: Implement for free
-
-        if (EconomyService.POIEconomyEnabled()) {
+        if (EconomyService.POIEconomyEnabled() && poiCount >= ConfigManager.getConfig().getInt("poi.for_free") && !p.hasPermission("lmke-warps.bypass.economy")) {
             double price = EconomyService.getPOICreatePrice();
 
             if (EconomyService.playerHasMoney(p, price)) {
@@ -190,7 +208,7 @@ public class POICommand extends CommandBase {
             return;
         }
 
-        if (EconomyService.POIEconomyEnabled()) {
+        if (EconomyService.POIEconomyEnabled() && !p.hasPermission("lmke-warps.bypass.economy")) {
             double price = EconomyService.getPOIDeletePrice();
 
             if (EconomyService.playerHasMoney(p, price)) {

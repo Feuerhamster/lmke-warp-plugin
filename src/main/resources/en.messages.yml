@@ -2,7 +2,8 @@ common:
   prefix: '§3lmke §6warps §8» §7'
   header: '§7---[ §3lmke §6warps §7]---'
   refund: 'refund'
-  limit: '§7Limit: §e'
+  limit: '§7Limit: §e%s §7available'
+  for_free: '§7Available for free: §e'
 
 errors:
   missing_args: '§4Error: One or more arguments missing'

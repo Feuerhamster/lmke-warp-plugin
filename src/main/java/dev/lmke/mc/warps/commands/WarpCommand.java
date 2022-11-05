@@ -28,13 +28,15 @@ public class WarpCommand extends CommandBase {
     }
 
     @SubCommand("help")
-    @HasPermission("lmke-warps.warps")
+    @HasPermission("lmke-warps.warp")
     public void help(CommandSender sender, Command command, String[] args) {
         List<String> warps = locale.getStringList("warp.help");
         String header = locale.getString("common.header");
 
         sender.sendMessage(header);
         sender.sendMessage(warps.toArray(new String[0]));
+
+        int warpCount = DAL.getPlayerWarpCount(((Player) sender).getUniqueId());
 
         if (EconomyService.warpEconomyEnabled()) {
             double create = EconomyService.getWarpCreatePrice();
@@ -49,7 +51,22 @@ public class WarpCommand extends CommandBase {
 
             sender.sendMessage(String.format(locale.getString("warp.help_economy.create"), createPriceText));
             sender.sendMessage(String.format(locale.getString("warp.help_economy.delete"), deletePriceText));
-            sender.sendMessage(MessageLocaleManager.getText("common.limit") + ConfigManager.getConfig().getInt("warp.limit"));
+
+            int forFree = ConfigManager.getConfig().getInt("warp.for_free");
+
+            if (forFree > 0) {
+                int hasLeft = Math.max(forFree - warpCount, 0);
+
+                String msg = locale.getString("common.for_free") + hasLeft + "/" + forFree;
+                sender.sendMessage(msg);
+            }
+        }
+
+        int limit = ConfigManager.getConfig().getInt("warp.limit");
+
+        if (limit > 0) {
+            int hasLeft = Math.max(limit - warpCount, 0);
+            sender.sendMessage(String.format(locale.getString("common.limit"), hasLeft + "/" + limit));
         }
     }
 
@@ -58,7 +75,7 @@ public class WarpCommand extends CommandBase {
      */
     @Override
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps")
+    @HasPermission("lmke-warps.warp")
     public void perform(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -96,7 +113,7 @@ public class WarpCommand extends CommandBase {
      */
     @SubCommand("list")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.list")
+    @HasPermission("lmke-warps.warp.list")
     public void list(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -114,7 +131,7 @@ public class WarpCommand extends CommandBase {
      */
     @SubCommand("create")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.create")
+    @HasPermission("lmke-warps.warp.create")
     public void create(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -148,14 +165,15 @@ public class WarpCommand extends CommandBase {
             return;
         }
 
-        if (DAL.getPlayerWarpCount(p.getUniqueId()) >= ConfigManager.getConfig().getInt("warp.limit")) {
+        int warpCount = DAL.getPlayerWarpCount(p.getUniqueId());
+        int limit = ConfigManager.getConfig().getInt("warp.limit");
+
+        if (warpCount >= limit && limit > 0 && !p.hasPermission("lmke-warps.bypass.limit")) {
             p.sendMessage(MessageLocaleManager.getText("errors.limit_reached"));
             return;
         }
 
-        // TODO: Implement for free
-
-        if (EconomyService.warpEconomyEnabled()) {
+        if (EconomyService.warpEconomyEnabled() && warpCount >= ConfigManager.getConfig().getInt("warp.for_free") && !p.hasPermission("lmke-warps.bypass.economy")) {
             double price = EconomyService.getWarpCreatePrice();
 
             if (EconomyService.playerHasMoney(p, price)) {
@@ -178,7 +196,7 @@ public class WarpCommand extends CommandBase {
      */
     @SubCommand("delete")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.delete")
+    @HasPermission("lmke-warps.warp.delete")
     public void delete(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -190,7 +208,7 @@ public class WarpCommand extends CommandBase {
         WarpPoint wp = DAL.getPlayerWarpPoint(args[0], p.getUniqueId());
 
         if (wp != null) {
-            if (EconomyService.warpEconomyEnabled()) {
+            if (EconomyService.warpEconomyEnabled() && !p.hasPermission("lmke-warps.bypass.economy")) {
                 double price = EconomyService.getWarpDeletePrice();
 
                 if (EconomyService.playerHasMoney(p, price)) {

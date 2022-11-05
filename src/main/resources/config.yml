@@ -32,7 +32,7 @@ warp:
   for_free: 1
   limit: 5
 
-# POI's (point of interest) are public teleport points. Every player can teleport to poi's.
+# POI's (points of interest) are public teleport points. Every player can teleport to poi's.
 poi:
   enable: true
   enable_signs: true
