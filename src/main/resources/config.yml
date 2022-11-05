@@ -1,6 +1,43 @@
-# ----------------------
+# -----------------------
 # lmke Warp Configuration
-# ----------------------
+# -----------------------
 
 # Change the language of the messages (eg. select what message file to use)
 locale: 'de'
+
+# Validate the names of warps and pois on creation
+validation:
+  pattern: '^[a-z0-9\-]+$'
+  minlength: 2
+  maxlength: 16
+
+# ------------------
+# Configure features
+# ------------------
+# enable: Enable or disable feature
+# enable_signs: Players can create teleportation signs for thier pois (poi only)
+# enable_economy: Enable or disable economy support (requires vault and an economy plugin)
+# create_cost: Money needed to create
+# delete_cost: Money needed to delete.
+# Money values can also be negative. In that case, the user will obtain the amount instead of paying (eg. refund)
+# for_free: How many the player gets for free before he has to pay
+# limit: Limits the number of how many a player can have at the same time. The limit is per player per type.
+
+# Warps represent private teleport points. They're seperated by player, so a player can only teleport to thier own warps.
+warp:
+  enable: true
+  enable_economy: false
+  create_cost: 50
+  delete_cost: -100
+  for_free: 1
+  limit: 5
+
+# POI's (point of interest) are public teleport points. Every player can teleport to poi's.
+poi:
+  enable: true
+  enable_signs: true
+  enable_economy: true
+  create_cost: 100
+  delete_cost: -100
+  for_free: 0
+  limit: 3

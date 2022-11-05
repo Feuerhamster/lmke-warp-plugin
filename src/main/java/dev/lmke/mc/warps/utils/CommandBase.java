@@ -4,15 +4,15 @@ import dev.lmke.mc.warps.annotations.HasPermission;
 import dev.lmke.mc.warps.annotations.IsPlayerCommand;
 import dev.lmke.mc.warps.annotations.SubCommand;
 import dev.lmke.mc.warps.annotations.TabComplete;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class CommandBase implements CommandExecutor, TabExecutor {
 
@@ -62,7 +62,7 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
             HasPermission annotation = commandMethod.getAnnotation(HasPermission.class);
 
             if (!sender.hasPermission(annotation.value())) {
-                // TODO: Implement error message
+                sender.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
                 return false;
             }
         }
@@ -105,7 +105,7 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
                 // Remove first element because it's the subcommand
                 newArgs = Arrays.copyOfRange(args, 1, args.length);
             } else {
-                return null;
+                return new ArrayList<String>();
             }
 
             try {

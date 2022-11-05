@@ -6,5 +6,8 @@ description: Warp plugin with economy support
 website: lmke.dev
 commands:
   warp:
-    usage: "/warp <create|delete|help|<name>>"
+    usage: "/warp <create|delete|help|<name>> [name]"
     description: Warp command
+  poi:
+    usage: "/poi <create|delete|help|<name>> [name]"
+    description: Point of interest command

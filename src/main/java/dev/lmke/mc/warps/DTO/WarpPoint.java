@@ -1,4 +1,4 @@
-package dev.lmke.mc.warps.database;
+package dev.lmke.mc.warps.DTO;
 
 import org.bukkit.Location;
 import org.dizitart.no2.Document;
@@ -7,7 +7,6 @@ import org.dizitart.no2.mapper.Mappable;
 import org.dizitart.no2.mapper.NitriteMapper;
 import org.dizitart.no2.objects.Id;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 

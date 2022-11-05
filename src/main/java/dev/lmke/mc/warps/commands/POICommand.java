@@ -3,10 +3,9 @@ package dev.lmke.mc.warps.commands;
 import dev.lmke.mc.warps.annotations.HasPermission;
 import dev.lmke.mc.warps.annotations.IsPlayerCommand;
 import dev.lmke.mc.warps.annotations.SubCommand;
-import dev.lmke.mc.warps.annotations.TabComplete;
 import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.database.Database;
-import dev.lmke.mc.warps.DTO.WarpPoint;
+import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.services.EconomyService;
 import dev.lmke.mc.warps.utils.CommandBase;
 import dev.lmke.mc.warps.utils.ConfigManager;
@@ -18,27 +17,28 @@ import org.bukkit.entity.Player;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.dizitart.no2.objects.filters.ObjectFilters;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class WarpCommand extends CommandBase {
+public class POICommand extends CommandBase {
     private final FileConfiguration locale = MessageLocaleManager.getConfig();
 
-    public WarpCommand() {
+    public POICommand() {
         super();
     }
 
     @SubCommand("help")
-    @HasPermission("lmke-warps.warps")
+    @HasPermission("lmke-warps.poi")
     public void help(CommandSender sender, Command command, String[] args) {
-        List<String> warps = locale.getStringList("warp.help");
+        List<String> warps = locale.getStringList("poi.help");
         String header = locale.getString("common.header");
 
         sender.sendMessage(header);
         sender.sendMessage(warps.toArray(new String[0]));
 
-        if (EconomyService.warpEconomyEnabled()) {
-            double create = EconomyService.getWarpCreatePrice();
-            double delete = EconomyService.getWarpDeletePrice();
+        if (EconomyService.POIEconomyEnabled()) {
+            double create = EconomyService.getPOICreatePrice();
+            double delete = EconomyService.getPOIDeletePrice();
 
             String refund = locale.getString("common.refund");
 
@@ -47,8 +47,8 @@ public class WarpCommand extends CommandBase {
 
             sender.sendMessage("");
 
-            sender.sendMessage(String.format(locale.getString("warp.help_economy.create"), createPriceText));
-            sender.sendMessage(String.format(locale.getString("warp.help_economy.delete"), deletePriceText));
+            sender.sendMessage(String.format(locale.getString("poi.help_economy.create"), createPriceText));
+            sender.sendMessage(String.format(locale.getString("poi.help_economy.delete"), deletePriceText));
             sender.sendMessage(MessageLocaleManager.getText("common.limit") + ConfigManager.getConfig().getInt("warp.limit"));
         }
     }
@@ -58,7 +58,7 @@ public class WarpCommand extends CommandBase {
      */
     @Override
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps")
+    @HasPermission("lmke-warps.poi")
     public void perform(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -67,32 +67,22 @@ public class WarpCommand extends CommandBase {
             return;
         }
 
-        WarpPoint wp = DAL.getPlayerWarpPoint(args[0], p.getUniqueId());
+        POIObject poi = DAL.getPOI(args[0]);
 
-        if (wp != null) {
-            p.teleport(wp.location);
+        if (poi != null) {
+            p.teleport(poi.location);
         } else {
             p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
         }
     }
 
-    /**
-     * Autocomplete for perform and delete method
-     */
     @Override
-    @TabComplete("delete")
     public List<String> onTabComplete(CommandSender sender, Command command, String[] args) {
-        if (!(sender instanceof Player)) {
-            return null;
-        }
-
-        Player p = (Player) sender;
-
-        return DAL.getPlayerWarpsList(p.getUniqueId());
+        return new ArrayList<String>();
     }
 
     /**
-     * List a player's warp points
+     * List the warp points that the player has created
      */
     @SubCommand("list")
     @IsPlayerCommand
@@ -100,21 +90,21 @@ public class WarpCommand extends CommandBase {
     public void list(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
-        List<String> wpList = DAL.getPlayerWarpsList(p.getUniqueId());
+        List<String> list = DAL.getPlayerPOIList(p.getUniqueId());
 
-        int limit = ConfigManager.getConfig().getInt("warp.limit");
+        int limit = ConfigManager.getConfig().getInt("poi.limit");
 
-        String count = "(" + wpList.size() + "/" + limit + ")";
+        String count = "(" + list.size() + "/" + limit + ")";
 
-        p.sendMessage(locale.getString("common.prefix") + count + " " + String.join(", ", wpList));
+        p.sendMessage(locale.getString("common.prefix") + count + " " + String.join(", ", list));
     }
 
     /**
-     * Create a warp point
+     * Create a point of interest
      */
     @SubCommand("create")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.create")
+    @HasPermission("lmke-warps.poi.create")
     public void create(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -123,7 +113,7 @@ public class WarpCommand extends CommandBase {
             return;
         }
 
-        if (DAL.getPlayerWarpPoint(args[0], p.getUniqueId()) != null) {
+        if (DAL.getPOI(args[0]) != null) {
             p.sendMessage(MessageLocaleManager.getText("errors.already_exists"));
             return;
         }
@@ -148,15 +138,15 @@ public class WarpCommand extends CommandBase {
             return;
         }
 
-        if (DAL.getPlayerWarpCount(p.getUniqueId()) >= ConfigManager.getConfig().getInt("warp.limit")) {
+        if (DAL.getPlayerPOICount(p.getUniqueId()) >= ConfigManager.getConfig().getInt("poi.limit")) {
             p.sendMessage(MessageLocaleManager.getText("errors.limit_reached"));
             return;
         }
 
         // TODO: Implement for free
 
-        if (EconomyService.warpEconomyEnabled()) {
-            double price = EconomyService.getWarpCreatePrice();
+        if (EconomyService.POIEconomyEnabled()) {
+            double price = EconomyService.getPOICreatePrice();
 
             if (EconomyService.playerHasMoney(p, price)) {
                 EconomyService.modifyBalance(p, price);
@@ -166,19 +156,19 @@ public class WarpCommand extends CommandBase {
             }
         }
 
-        WarpPoint wp = new WarpPoint(args[0], p.getUniqueId(), p.getLocation());
+        POIObject poi = new POIObject(args[0], p.getUniqueId(), p.getLocation());
 
-        Database.getRepo(WarpPoint.class).insert(wp);
+        Database.getRepo(POIObject.class).insert(poi);
 
-        p.sendMessage(MessageLocaleManager.getText("warp.created"));
+        p.sendMessage(MessageLocaleManager.getText("poi.created"));
     }
 
     /**
-     * Delete a warp point
+     * Delete a point of interest
      */
     @SubCommand("delete")
     @IsPlayerCommand
-    @HasPermission("lmke-warps.warps.delete")
+    @HasPermission("lmke-warps.poi.delete")
     public void delete(CommandSender sender, Command command, String[] args) {
         Player p = (Player) sender;
 
@@ -187,26 +177,36 @@ public class WarpCommand extends CommandBase {
             return;
         }
 
-        WarpPoint wp = DAL.getPlayerWarpPoint(args[0], p.getUniqueId());
+        POIObject poi = DAL.getPOI(args[0]);
 
-        if (wp != null) {
-            if (EconomyService.warpEconomyEnabled()) {
-                double price = EconomyService.getWarpDeletePrice();
-
-                if (EconomyService.playerHasMoney(p, price)) {
-                    EconomyService.modifyBalance(p, price);
-                } else {
-                    p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
-                    return;
-                }
-            }
-
-            ObjectRepository<WarpPoint> repo = Database.getRepo(WarpPoint.class);
-            repo.remove(ObjectFilters.eq("_id", wp.id));
-
-            p.sendMessage(MessageLocaleManager.getText("warp.deleted"));
-        } else {
+        if (poi == null) {
             p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            return;
         }
+
+        // Only can delete own pois except player has admin permission
+        if (poi.player != p.getUniqueId() && !p.hasPermission("lmke-warps.admin")) {
+            p.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
+            return;
+        }
+
+        if (EconomyService.POIEconomyEnabled()) {
+            double price = EconomyService.getPOIDeletePrice();
+
+            if (EconomyService.playerHasMoney(p, price)) {
+                EconomyService.modifyBalance(p, price);
+            } else {
+                p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
+                return;
+            }
+        }
+
+        ObjectRepository<POIObject> repo = Database.getRepo(POIObject.class);
+        repo.remove(ObjectFilters.eq("_id", poi.id));
+
+        p.sendMessage(MessageLocaleManager.getText("poi.deleted"));
     }
+
+
+
 }

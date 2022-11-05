@@ -1,10 +1,18 @@
 common:
   prefix: '§3lmke §6warps §8» §7'
   header: '§7---[ §3lmke §6warps §7]---'
+  refund: 'refund'
+  limit: '§7Limit: §e'
 
 errors:
   missing_args: '§4Error: One or more arguments missing'
+  missing_permission: '§cError: Missing permissions'
   not_found: '§4Error: Not found'
+  already_exists: '§cError: Already exists'
+  invalid: '§cError: Invalid input'
+  invalid_requirements: '§cRequirements: Length: %s chars, Pattern: %s'
+  no_money: '§cError: Not enough money'
+  limit_reached: '§cError: Limit reached'
 
 warp:
   help:
@@ -12,11 +20,20 @@ warp:
     - '§6/warp list §8- §7List all your warp points'
     - '§6/warp create <name> §8- §7Create a new warp point'
     - '§6/warp delete <name> §8- §7Delete a warp point'
+  help_economy:
+    create: 'Cost for a warp point: §6%s'
+    delete: 'Cost for deletion: §6%s'
   created: '§aWarp point created'
   deleted: '§eWarp point removed'
 
-visit:
+poi:
   help:
-    - '§c/visit <name> §8- §7Teleport to a visiting point'
-    - '§c/visit create <name> §8- §7Create a new visiting point'
-    - '§c/visit delete <name> §8- §7Delete a visiting point'
+    - '§c/poi visit <name> §8- §7Teleport to a point of interest'
+    - '§c/poi list §8- §7List all point of interests that you created'
+    - '§c/poi create <name> §8- §7Create a new point of interest'
+    - '§c/poi delete <name> §8- §7Delete one of your point of interests'
+  help_economy:
+    create: '§7Cost for a POI: §c%s'
+    delete: '§7Cost for deletion: §c%s'
+  created: '§aPOI created'
+  deleted: '§ePOI removed'

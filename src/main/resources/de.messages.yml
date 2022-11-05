@@ -1,10 +1,18 @@
 common:
   prefix: '§3lmke §6warps §8» §7'
   header: '§7---[ §3lmke §6warps §7]---'
+  refund: 'Rückerstattung'
+  limit: '§7Limit: '
 
 errors:
   missing_args: '§cFehler: Ein oder mehrere Argumente fehlen'
+  missing_permission: '§cFehler: Keine Berechtigung'
   not_found: '§cFehler: Nicht gefunden'
+  already_exists: '§cFehler: Existiert bereits'
+  invalid: '§cFehler: Invalide Eingabe'
+  invalid_requirements: '§cAnforderungen: Länge: %s Zeichen, Pattern: %s'
+  no_money: '§cFehler: Nicht genug Geld'
+  limit_reached: '§cError: Limit erreicht'
 
 warp:
   help:
@@ -12,11 +20,20 @@ warp:
     - '§6/warp list §8- §7Listet alle deine Warp-Punkte auf'
     - '§6/warp create <name> §8- §7Erstelle einen neuen Warp-Punkt'
     - '§6/warp delete <name> §8- §7Lösche einen Warp-Punkt'
+  help_economy:
+    create: '§7Kosten für Warp-Punkt: §6%s'
+    delete: '§7Entfernungskosten: §6%s'
   created: '§aWarp-Punkt erstellt'
   deleted: '§eWarp-Punkt entfernt'
 
-visit:
+poi:
   help:
-    - '§c/visit <name> §8- §7Teleporiere dich zu einem Besuchspunkt'
-    - '§c/visit create <name> §8- §7Erstelle einen neuen öffentlichen Besuchspunkt'
-    - '§c/visit delete <name> §8- §7Lösche einen Besuchspunkt'
+    - '§c/poi <name> §8- §7Teleporiere dich zu einem Besuchspunkt'
+    - '§c/poi list §8- §7Listet alle Besuchspunkte auf, die von dir erstellt wurden'
+    - '§c/poi create <name> §8- §7Erstelle einen neuen öffentlichen Besuchspunkt'
+    - '§c/poi delete <name> §8- §7Lösche einen Besuchspunkt'
+  help_economy:
+    create: '§7Kosten für Besuchspunkt: §c%s'
+    delete: '§7Entfernungskosten: §c%s'
+  created: '§aBesuchspunkt erstellt'
+  deleted: '§eBesuchspunkt entfernt'
