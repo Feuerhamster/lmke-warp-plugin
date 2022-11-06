@@ -38,3 +38,6 @@ poi:
     delete: '§7Cost for deletion: §c%s'
   created: '§aPOI created'
   deleted: '§ePOI removed'
+
+map:
+  marker_set_label: Points of interest

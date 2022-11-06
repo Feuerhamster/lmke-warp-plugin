@@ -7,7 +7,9 @@ public class MapManagerService {
         if (BlueMapService.hasAPI()) {
             BlueMapService.addPOI(poi);
 
-        } else if (DynmapService.hasAPI()) {
+        }
+
+        if (DynmapService.hasAPI()) {
             DynmapService.addMarker(poi);
         }
     }
@@ -16,7 +18,9 @@ public class MapManagerService {
         if (BlueMapService.hasAPI()) {
             BlueMapService.removePOI(poi);
 
-        } else if (DynmapService.hasAPI()) {
+        }
+
+        if (DynmapService.hasAPI()) {
             DynmapService.removeMarker(poi);
         }
     }

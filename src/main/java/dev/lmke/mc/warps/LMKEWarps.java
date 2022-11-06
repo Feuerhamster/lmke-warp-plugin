@@ -51,7 +51,7 @@ public final class LMKEWarps extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("map_support.enable_dynmap")) {
-            DynmapService.registerDynmap(this);
+            DynmapService.registerDynmap();
         }
 
         System.out.printf("[%s] Plugin loaded%n", getDescription().getName());
@@ -59,6 +59,7 @@ public final class LMKEWarps extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        Database.commit();
         Database.closeDatabase();
 
         System.out.printf("[%s] Plugin disabled%n", getDescription().getName());

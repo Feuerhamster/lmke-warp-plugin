@@ -11,12 +11,9 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 public class MessageLocaleManager {
-
     private static final Plugin plugin = LMKEWarps.getPlugin(LMKEWarps.class);
-    private static File file;
     private static FileConfiguration content;
-
-    private static String[] locales = { "de", "en" };
+    private static final String[] locales = { "de", "en" };
 
     public static void setup() {
         for (String locale : locales) {
@@ -38,7 +35,7 @@ public class MessageLocaleManager {
     }
 
     public static void loadMessageFile(String locale) {
-        file = new File(plugin.getDataFolder().getAbsolutePath(), locale + ".messages.yml");
+        File file = new File(plugin.getDataFolder().getAbsolutePath(), locale + ".messages.yml");
         content = YamlConfiguration.loadConfiguration(file);
     }
 

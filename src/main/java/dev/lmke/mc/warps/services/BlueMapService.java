@@ -8,6 +8,7 @@ import de.bluecolored.bluemap.api.markers.POIMarker;
 import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.LMKEWarps;
 import dev.lmke.mc.warps.database.DAL;
+import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import org.bukkit.Bukkit;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class BlueMapService {
 
             for (BlueMapWorld world : api.getWorlds()) {
                 for (BlueMapMap map : world.getMaps()) {
-                    MarkerSet markerSet = new MarkerSet("lmke warps");
+                    MarkerSet markerSet = new MarkerSet(MessageLocaleManager.getText("map.marker_set_label"));
 
                     List<POIObject> filteredPois = pois.stream().filter(p -> p.location.getWorld().getName().equals(map.getName())).collect(Collectors.toList());
 

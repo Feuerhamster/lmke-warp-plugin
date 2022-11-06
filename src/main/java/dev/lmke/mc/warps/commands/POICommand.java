@@ -1,11 +1,11 @@
 package dev.lmke.mc.warps.commands;
 
+import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.annotations.HasPermission;
 import dev.lmke.mc.warps.annotations.IsPlayerCommand;
 import dev.lmke.mc.warps.annotations.SubCommand;
 import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.database.Database;
-import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.services.EconomyService;
 import dev.lmke.mc.warps.services.MapManagerService;
 import dev.lmke.mc.warps.utils.CommandBase;
@@ -15,7 +15,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.dizitart.no2.NitriteId;
 import org.dizitart.no2.WriteResult;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.dizitart.no2.objects.filters.ObjectFilters;
@@ -31,13 +30,16 @@ public class POICommand extends CommandBase {
         super();
     }
 
+    /**
+     * Print help to player
+     * /poi help
+     */
     @SubCommand("help")
     @HasPermission("lmke-warps.poi")
     public void help(CommandSender sender, Command command, String[] args) {
         List<String> warps = locale.getStringList("poi.help");
-        String header = locale.getString("common.header");
 
-        sender.sendMessage(header);
+        sender.sendMessage(locale.getString("common.header"));
         sender.sendMessage(warps.toArray(new String[0]));
 
         int poiCount = DAL.getPlayerPOICount(((Player) sender).getUniqueId());
@@ -76,6 +78,7 @@ public class POICommand extends CommandBase {
 
     /**
      * Default method that get executed if no subcommand is selected
+     * /poi [name]
      */
     @Override
     @IsPlayerCommand
@@ -103,7 +106,8 @@ public class POICommand extends CommandBase {
     }
 
     /**
-     * List the warp points that the player has created
+     * List the poi's that are currently owned by the player
+     * /poi list
      */
     @SubCommand("list")
     @IsPlayerCommand
@@ -122,6 +126,7 @@ public class POICommand extends CommandBase {
 
     /**
      * Create a point of interest
+     * /poi create <name>
      */
     @SubCommand("create")
     @IsPlayerCommand
@@ -191,6 +196,7 @@ public class POICommand extends CommandBase {
 
     /**
      * Delete a point of interest
+     * /poi delete <name>
      */
     @SubCommand("delete")
     @IsPlayerCommand
@@ -234,7 +240,4 @@ public class POICommand extends CommandBase {
 
         p.sendMessage(MessageLocaleManager.getText("poi.deleted"));
     }
-
-
-
 }

@@ -26,7 +26,6 @@ public class WarpPoint implements Mappable {
     @Override
     public Document write(NitriteMapper mapper) {
         Document document = new Document();
-        //document.put("_id", this.id);
         document.put("name", this.name);
         document.put("player", this.player.toString());
         document.put("location", this.location.serialize());

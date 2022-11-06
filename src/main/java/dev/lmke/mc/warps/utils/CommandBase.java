@@ -82,7 +82,7 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
 
         if (args.length < 2) {
             List<String> values = new ArrayList<String>(subCommands.keySet());
-            List<String> res = new ArrayList<String>();
+            List<String> res;
 
             try {
                 res = (List<String>) this.getClass().getDeclaredMethod("onTabComplete", CommandSender.class, Command.class, String[].class)
@@ -95,8 +95,8 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
 
             return values;
         } else {
-            Method method = null;
-            String[] newArgs = args;
+            Method method;
+            String[] newArgs;
 
             // Use subcommand if exists or use default perform method
             if (tabCompletes.containsKey(args[0])) {

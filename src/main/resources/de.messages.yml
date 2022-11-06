@@ -38,3 +38,6 @@ poi:
     delete: '§7Entfernungskosten: §c%s'
   created: '§aBesuchspunkt erstellt'
   deleted: '§eBesuchspunkt entfernt'
+
+map:
+  marker_set_label: Besuchspunkte
