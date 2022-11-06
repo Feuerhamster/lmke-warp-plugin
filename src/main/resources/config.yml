@@ -41,3 +41,7 @@ poi:
   delete_cost: -100
   for_free: 0
   limit: 3
+
+map_support:
+  enable_bluemap: true
+  enable_dynmap: true

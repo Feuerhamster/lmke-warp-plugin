@@ -63,4 +63,11 @@ public class DAL {
         Cursor<POIObject> cursor = repo.find(ObjectFilters.eq("player", player.toString()));
         return cursor.totalCount();
     }
+
+    public static List<POIObject> getAllPOIs() {
+        ObjectRepository<POIObject> repo = Database.getRepo(POIObject.class);
+        Cursor<POIObject> cursor = repo.find();
+
+        return cursor.toList();
+    }
 }

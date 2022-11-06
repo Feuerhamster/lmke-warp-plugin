@@ -1,6 +1,8 @@
 # LMKE Warps Spigot Plugin
 **Game Version:** 1.15
 
+> A simple and clean but also feature rich warp plugin with economy support
+
 ## Features
 - Private warps
 - Public warps (poi's = points of interest)
@@ -20,6 +22,12 @@ Public warps, or poi's (points of interest) are global and everyone can teleport
 It's useful for example if a player has a shop and want other players to visit their shop.
 
 This type of warps can have **teleport signs**. Simply create a sign and write `[poi]` in the first line and the name of the poi in the second line.
+
+## Installation & Configuration
+Just download the latest build from the [releases](/releases) and paste it into your plugins directory.
+If you want to have economy support, you will need [Vault](https://www.spigotmc.org/resources/vault.34315/) and a compatible economy plugin.
+
+For more details on configuration, please see [config.yml](/src/main/resources/config.yml)
 
 ## Commands
 

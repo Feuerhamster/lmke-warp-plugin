@@ -75,6 +75,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>repo.mikeprimm.com</id>
+            <url>https://repo.mikeprimm.com/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -95,6 +99,19 @@
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.BlueMap-Minecraft</groupId>
+            <artifactId>BlueMapAPI</artifactId>
+            <version>v2.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>us.dynmap</groupId>
+            <artifactId>dynmap-api</artifactId>
+            <version>3.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

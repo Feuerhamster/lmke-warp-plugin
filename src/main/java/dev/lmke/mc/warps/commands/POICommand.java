@@ -7,6 +7,7 @@ import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.database.Database;
 import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.services.EconomyService;
+import dev.lmke.mc.warps.services.MapManagerService;
 import dev.lmke.mc.warps.utils.CommandBase;
 import dev.lmke.mc.warps.utils.ConfigManager;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
@@ -14,8 +15,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.dizitart.no2.NitriteId;
+import org.dizitart.no2.WriteResult;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.dizitart.no2.objects.filters.ObjectFilters;
+import org.dizitart.no2.util.Iterables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +180,11 @@ public class POICommand extends CommandBase {
 
         POIObject poi = new POIObject(args[0], p.getUniqueId(), p.getLocation());
 
-        Database.getRepo(POIObject.class).insert(poi);
+        WriteResult res = Database.getRepo(POIObject.class).insert(poi);
+
+        poi.id = Iterables.firstOrDefault(res);
+
+        MapManagerService.addPOI(poi);
 
         p.sendMessage(MessageLocaleManager.getText("poi.created"));
     }
@@ -221,6 +229,8 @@ public class POICommand extends CommandBase {
 
         ObjectRepository<POIObject> repo = Database.getRepo(POIObject.class);
         repo.remove(ObjectFilters.eq("_id", poi.id));
+
+        MapManagerService.removePOI(poi);
 
         p.sendMessage(MessageLocaleManager.getText("poi.deleted"));
     }

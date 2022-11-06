@@ -1,9 +1,12 @@
 package dev.lmke.mc.warps;
 
+import de.bluecolored.bluemap.api.BlueMapAPI;
 import dev.lmke.mc.warps.commands.POICommand;
 import dev.lmke.mc.warps.commands.WarpCommand;
 import dev.lmke.mc.warps.database.Database;
 import dev.lmke.mc.warps.events.POISignEvent;
+import dev.lmke.mc.warps.services.BlueMapService;
+import dev.lmke.mc.warps.services.DynmapService;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -41,6 +44,14 @@ public final class LMKEWarps extends JavaPlugin {
 
         if (!setupEconomy()) {
             System.out.printf("[%s] Vault plugin not found. Proceeding without economy support!%n", getDescription().getName());
+        }
+
+        if (getConfig().getBoolean("map_support.enable_bluemap")) {
+            BlueMapAPI.onEnable(BlueMapService::setup);
+        }
+
+        if (getConfig().getBoolean("map_support.enable_dynmap")) {
+            DynmapService.registerDynmap(this);
         }
 
         System.out.printf("[%s] Plugin loaded%n", getDescription().getName());

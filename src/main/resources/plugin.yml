@@ -11,3 +11,8 @@ commands:
   poi:
     usage: "/poi <create|delete|help|<name>> [name]"
     description: Point of interest command
+
+softdepend:
+  - BlueMap
+  - Vault
+  - dynmap
