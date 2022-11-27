@@ -13,7 +13,6 @@ import dev.lmke.mc.warps.utils.ConfigManager;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.dizitart.no2.WriteResult;
 import org.dizitart.no2.objects.ObjectRepository;

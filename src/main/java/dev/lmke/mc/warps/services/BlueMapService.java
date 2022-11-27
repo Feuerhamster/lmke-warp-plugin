@@ -13,18 +13,21 @@ import org.bukkit.Bukkit;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class BlueMapService {
-
     private static BlueMapAPI api = null;
+
     private static final String markerSetKey = "lmke-warps";
+
+    private static final Logger logger = LMKEWarps.getPlugin(LMKEWarps.class).getLogger();
 
     public static void setup(BlueMapAPI blueMapAPI) {
         api = blueMapAPI;
 
         Bukkit.getScheduler().runTaskAsynchronously(LMKEWarps.getPlugin(LMKEWarps.class), bukkitTask -> {
-            System.out.println("[lmke-warps] Loading all poi's into BlueMap...");
+            logger.info("Loading all poi's into BlueMap...");
 
             List<POIObject> pois = DAL.getAllPOIs();
 
@@ -45,7 +48,7 @@ public class BlueMapService {
                 }
             }
 
-            System.out.println("[lmke-warps] Loaded all poi's into BlueMaps");
+            logger.info("Loaded all poi's into BlueMaps");
         });
     }
 

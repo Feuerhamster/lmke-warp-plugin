@@ -1,19 +1,18 @@
 package dev.lmke.mc.warps.commands;
 
+import dev.lmke.mc.warps.DTO.WarpPoint;
 import dev.lmke.mc.warps.annotations.HasPermission;
 import dev.lmke.mc.warps.annotations.IsPlayerCommand;
 import dev.lmke.mc.warps.annotations.SubCommand;
 import dev.lmke.mc.warps.annotations.TabComplete;
 import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.database.Database;
-import dev.lmke.mc.warps.DTO.WarpPoint;
 import dev.lmke.mc.warps.services.EconomyService;
 import dev.lmke.mc.warps.utils.CommandBase;
 import dev.lmke.mc.warps.utils.ConfigManager;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.dizitart.no2.objects.ObjectRepository;
 import org.dizitart.no2.objects.filters.ObjectFilters;

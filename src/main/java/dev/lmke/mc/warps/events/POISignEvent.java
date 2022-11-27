@@ -4,9 +4,9 @@ import dev.lmke.mc.warps.DTO.POIObject;
 import dev.lmke.mc.warps.LMKEWarps;
 import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.block.TileState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -70,7 +70,7 @@ public class POISignEvent implements Listener {
 
         if (block == null) return;
 
-        if (!block.getType().equals(Material.OAK_WALL_SIGN) || !block.getType().equals(Material.OAK_SIGN) || !action.equals(Action.RIGHT_CLICK_BLOCK)) {
+        if (!(block.getState() instanceof Sign) || action != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 

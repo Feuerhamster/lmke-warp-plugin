@@ -43,7 +43,7 @@ public final class LMKEWarps extends JavaPlugin {
         }
 
         if (!setupEconomy()) {
-            System.out.printf("[%s] Vault plugin not found. Proceeding without economy support!%n", getDescription().getName());
+            getLogger().info("Vault plugin not found. Proceeding without economy support!");
         }
 
         if (getConfig().getBoolean("map_support.enable_bluemap")) {
@@ -54,7 +54,7 @@ public final class LMKEWarps extends JavaPlugin {
             DynmapService.registerDynmap();
         }
 
-        System.out.printf("[%s] Plugin loaded%n", getDescription().getName());
+        getLogger().info("Plugin loaded");
     }
 
     @Override
@@ -62,7 +62,7 @@ public final class LMKEWarps extends JavaPlugin {
         Database.commit();
         Database.closeDatabase();
 
-        System.out.printf("[%s] Plugin disabled%n", getDescription().getName());
+        getLogger().info("Plugin disabled");
     }
 
     private boolean setupEconomy() {

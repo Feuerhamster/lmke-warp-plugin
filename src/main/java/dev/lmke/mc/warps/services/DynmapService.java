@@ -5,19 +5,22 @@ import dev.lmke.mc.warps.LMKEWarps;
 import dev.lmke.mc.warps.database.DAL;
 import dev.lmke.mc.warps.utils.MessageLocaleManager;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.Marker;
 import org.dynmap.markers.MarkerIcon;
 import org.dynmap.markers.MarkerSet;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DynmapService {
     private static DynmapAPI dapi = null;
+
     private static MarkerSet markerset = null;
+
     private static final String markerSetKey = "lmke-warps";
 
+    private static final Logger logger = LMKEWarps.getPlugin(LMKEWarps.class).getLogger();
 
     public static void registerDynmap() {
         dapi = (DynmapAPI) Bukkit.getServer().getPluginManager().getPlugin("dynmap");
@@ -25,7 +28,7 @@ public class DynmapService {
         if (dapi == null) return;
 
         Bukkit.getScheduler().runTaskAsynchronously(LMKEWarps.getPlugin(LMKEWarps.class), bukkitTask -> {
-            System.out.println("[lmke-warps] Loading all poi's into dynmap...");
+            logger.info("Loading all poi's into dynmap...");
 
             String label = MessageLocaleManager.getTextRaw("map.marker_set_label");
 
@@ -40,7 +43,7 @@ public class DynmapService {
                 buildPOIMarker(poi);
             }
 
-            System.out.println("[lmke-warps] Loaded all poi's into dynmap");
+            logger.info("Loaded all poi's into dynmap");
         });
     }
 
