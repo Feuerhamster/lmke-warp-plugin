@@ -54,7 +54,7 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
 
         // Check if it is a player command
         if (commandMethod.isAnnotationPresent(IsPlayerCommand.class) && !(sender instanceof Player)) {
-            return false;
+            return true;
         }
 
         // Check if player has permission
@@ -62,8 +62,8 @@ public abstract class CommandBase implements CommandExecutor, TabExecutor {
             HasPermission annotation = commandMethod.getAnnotation(HasPermission.class);
 
             if (!sender.hasPermission(annotation.value())) {
-                sender.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
-                return false;
+                sender.sendMessage(MessageLocaleManager.getChatText("errors.missing_permission"));
+                return true;
             }
         }
 

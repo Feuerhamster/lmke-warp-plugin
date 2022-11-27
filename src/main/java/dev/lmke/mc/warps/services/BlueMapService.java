@@ -24,13 +24,13 @@ public class BlueMapService {
         api = blueMapAPI;
 
         Bukkit.getScheduler().runTaskAsynchronously(LMKEWarps.getPlugin(LMKEWarps.class), bukkitTask -> {
-            System.out.println("[lmke-warps] Loading all poi's into BlueMaps...");
+            System.out.println("[lmke-warps] Loading all poi's into BlueMap...");
 
             List<POIObject> pois = DAL.getAllPOIs();
 
             for (BlueMapWorld world : api.getWorlds()) {
                 for (BlueMapMap map : world.getMaps()) {
-                    MarkerSet markerSet = new MarkerSet(MessageLocaleManager.getText("map.marker_set_label"));
+                    MarkerSet markerSet = new MarkerSet(MessageLocaleManager.getTextRaw("map.marker_set_label"));
 
                     List<POIObject> filteredPois = pois.stream().filter(p -> p.location.getWorld().getName().equals(map.getName())).collect(Collectors.toList());
 

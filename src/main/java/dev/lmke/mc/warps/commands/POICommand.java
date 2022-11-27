@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class POICommand extends CommandBase {
-    private final FileConfiguration locale = MessageLocaleManager.getConfig();
-
     public POICommand() {
         super();
     }
@@ -37,9 +35,9 @@ public class POICommand extends CommandBase {
     @SubCommand("help")
     @HasPermission("lmke-warps.poi")
     public void help(CommandSender sender, Command command, String[] args) {
-        List<String> warps = locale.getStringList("poi.help");
+        List<String> warps = MessageLocaleManager.getConfig().getStringList("poi.help");
 
-        sender.sendMessage(locale.getString("common.header"));
+        sender.sendMessage(MessageLocaleManager.getTextRaw("common.header"));
         sender.sendMessage(warps.toArray(new String[0]));
 
         int poiCount = DAL.getPlayerPOICount(((Player) sender).getUniqueId());
@@ -48,31 +46,38 @@ public class POICommand extends CommandBase {
             double create = EconomyService.getPOICreatePrice();
             double delete = EconomyService.getPOIDeletePrice();
 
-            String refund = locale.getString("common.refund");
+            String refund = MessageLocaleManager.getTextRaw("common.refund");
 
             String createPriceText = create >= 0 ? String.valueOf(create) : Math.abs(create) + " " + refund;
             String deletePriceText = delete >= 0 ? String.valueOf(delete) : Math.abs(delete) + " " + refund;
 
+            if (sender.hasPermission("lmke-warps.bypass.economy")) {
+                createPriceText = MessageLocaleManager.getTextRaw("common.free");
+                deletePriceText = MessageLocaleManager.getTextRaw("common.free");
+            }
+
             sender.sendMessage("");
 
-            sender.sendMessage(String.format(locale.getString("poi.help_economy.create"), createPriceText));
-            sender.sendMessage(String.format(locale.getString("poi.help_economy.delete"), deletePriceText));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("poi.help_economy.create"), createPriceText));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("poi.help_economy.delete"), deletePriceText));
 
             int forFree = ConfigManager.getConfig().getInt("poi.for_free");
 
             if (forFree > 0) {
                 int hasLeft = Math.max(forFree - poiCount, 0);
 
-                String msg = locale.getString("common.for_free") + hasLeft + "/" + forFree;
+                String msg = MessageLocaleManager.getTextRaw("common.for_free") + hasLeft + "/" + forFree;
                 sender.sendMessage(msg);
             }
         }
 
         int limit = ConfigManager.getConfig().getInt("poi.limit");
 
-        if (limit > 0) {
+        if (limit > 0 && !sender.hasPermission("lmke-warps.bypass.limit")) {
             int hasLeft = Math.max(limit - poiCount, 0);
-            sender.sendMessage(String.format(locale.getString("common.limit"), hasLeft + "/" + limit));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("common.limit"), hasLeft + "/" + limit));
+        } else if(sender.hasPermission("lmke-warps.bypass.limit")) {
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("common.limit"), MessageLocaleManager.getTextRaw("common.bypass")));
         }
     }
 
@@ -96,7 +101,7 @@ public class POICommand extends CommandBase {
         if (poi != null) {
             p.teleport(poi.location);
         } else {
-            p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.not_found"));
         }
     }
 
@@ -121,7 +126,7 @@ public class POICommand extends CommandBase {
 
         String count = "(" + list.size() + "/" + limit + ")";
 
-        p.sendMessage(locale.getString("common.prefix") + count + " " + String.join(", ", list));
+        p.sendMessage(MessageLocaleManager.getTextRaw("common.prefix") + count + " " + String.join(", ", list));
     }
 
     /**
@@ -135,12 +140,12 @@ public class POICommand extends CommandBase {
         Player p = (Player) sender;
 
         if (args.length < 1) {
-            p.sendMessage(MessageLocaleManager.getText("errors.missing_args"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.missing_args"));
             return;
         }
 
         if (DAL.getPOI(args[0]) != null) {
-            p.sendMessage(MessageLocaleManager.getText("errors.already_exists"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.already_exists"));
             return;
         }
 
@@ -151,15 +156,15 @@ public class POICommand extends CommandBase {
 
         // validate
         if (pattern != null && !args[0].matches(pattern)) {
-            String msg = String.format(MessageLocaleManager.getText("errors.invalid_requirements"), lengths, pattern);
-            p.sendMessage(MessageLocaleManager.getText("errors.invalid"));
+            String msg = String.format(MessageLocaleManager.getChatText("errors.invalid_requirements"), lengths, pattern);
+            p.sendMessage(MessageLocaleManager.getChatText("errors.invalid"));
             p.sendMessage(msg);
             return;
         }
 
         if (args[0].length() < minLength || args[0].length() >= maxLength) {
-            String msg = String.format(MessageLocaleManager.getText("errors.invalid_requirements"), lengths, pattern);
-            p.sendMessage(MessageLocaleManager.getText("errors.invalid"));
+            String msg = String.format(MessageLocaleManager.getChatText("errors.invalid_requirements"), lengths, pattern);
+            p.sendMessage(MessageLocaleManager.getChatText("errors.invalid"));
             p.sendMessage(msg);
             return;
         }
@@ -168,7 +173,7 @@ public class POICommand extends CommandBase {
         int limit = ConfigManager.getConfig().getInt("poi.limit");
 
         if (poiCount >= limit && limit > 0 && !p.hasPermission("lmke-warps.bypass.limit")) {
-            p.sendMessage(MessageLocaleManager.getText("errors.limit_reached"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.limit_reached"));
             return;
         }
 
@@ -178,7 +183,7 @@ public class POICommand extends CommandBase {
             if (EconomyService.playerHasMoney(p, price)) {
                 EconomyService.modifyBalance(p, price);
             } else {
-                p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
+                p.sendMessage(MessageLocaleManager.getChatText("errors.no_money"));
                 return;
             }
         }
@@ -191,7 +196,7 @@ public class POICommand extends CommandBase {
 
         MapManagerService.addPOI(poi);
 
-        p.sendMessage(MessageLocaleManager.getText("poi.created"));
+        p.sendMessage(MessageLocaleManager.getChatText("poi.created"));
     }
 
     /**
@@ -205,20 +210,20 @@ public class POICommand extends CommandBase {
         Player p = (Player) sender;
 
         if (args.length < 1) {
-            p.sendMessage(MessageLocaleManager.getText("errors.missing_args"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.missing_args"));
             return;
         }
 
         POIObject poi = DAL.getPOI(args[0]);
 
         if (poi == null) {
-            p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.not_found"));
             return;
         }
 
         // Only can delete own pois except player has admin permission
-        if (poi.player != p.getUniqueId() && !p.hasPermission("lmke-warps.admin")) {
-            p.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
+        if (!poi.player.equals(p.getUniqueId()) && !p.hasPermission("lmke-warps.admin")) {
+            p.sendMessage(MessageLocaleManager.getChatText("errors.missing_permission"));
             return;
         }
 
@@ -228,7 +233,7 @@ public class POICommand extends CommandBase {
             if (EconomyService.playerHasMoney(p, price)) {
                 EconomyService.modifyBalance(p, price);
             } else {
-                p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
+                p.sendMessage(MessageLocaleManager.getChatText("errors.no_money"));
                 return;
             }
         }
@@ -238,6 +243,6 @@ public class POICommand extends CommandBase {
 
         MapManagerService.removePOI(poi);
 
-        p.sendMessage(MessageLocaleManager.getText("poi.deleted"));
+        p.sendMessage(MessageLocaleManager.getChatText("poi.deleted"));
     }
 }

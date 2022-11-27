@@ -32,14 +32,14 @@ public class POISignEvent implements Listener {
         }
 
         if (!e.getPlayer().hasPermission("lmke-warps.sign.create")) {
-            e.getPlayer().sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
+            e.getPlayer().sendMessage(MessageLocaleManager.getChatText("errors.missing_permission"));
             return;
         }
 
         POIObject poi = DAL.getPOI(e.getLine(1));
 
         if (poi == null) {
-            e.getPlayer().sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            e.getPlayer().sendMessage(MessageLocaleManager.getChatText("errors.not_found"));
             return;
         }
 
@@ -82,7 +82,7 @@ public class POISignEvent implements Listener {
         if (!container.has(key, PersistentDataType.LONG)) { return; }
 
         if (!player.hasPermission("lmke-warps.sign.use")) {
-            player.sendMessage(MessageLocaleManager.getText("errors.missing_permission"));
+            player.sendMessage(MessageLocaleManager.getChatText("errors.missing_permission"));
             return;
         }
 

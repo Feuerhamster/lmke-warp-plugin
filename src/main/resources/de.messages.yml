@@ -4,6 +4,8 @@ common:
   refund: 'Rückerstattung'
   limit: '§7Limit: §e%s §7verfügbar'
   for_free: '§7Kostenlos zur Verfügung: §e'
+  bypass: 'Unbegrenzt'
+  free: 'Kostenlos'
 
 errors:
   missing_args: '§cFehler: Ein oder mehrere Argumente fehlen'
@@ -13,7 +15,7 @@ errors:
   invalid: '§cFehler: Invalide Eingabe'
   invalid_requirements: '§cAnforderungen: Länge: %s Zeichen, Pattern: %s'
   no_money: '§cFehler: Nicht genug Geld'
-  limit_reached: '§cError: Limit erreicht'
+  limit_reached: '§cFehler: Limit erreicht'
 
 warp:
   help:

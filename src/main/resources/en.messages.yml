@@ -4,6 +4,8 @@ common:
   refund: 'refund'
   limit: '§7Limit: §e%s §7available'
   for_free: '§7Available for free: §e'
+  bypass: 'bypass'
+  free: 'free'
 
 errors:
   missing_args: '§4Error: One or more arguments missing'

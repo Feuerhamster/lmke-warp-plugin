@@ -21,7 +21,6 @@ import org.dizitart.no2.objects.filters.ObjectFilters;
 import java.util.List;
 
 public class WarpCommand extends CommandBase {
-    private final FileConfiguration locale = MessageLocaleManager.getConfig();
 
     public WarpCommand() {
         super();
@@ -30,8 +29,8 @@ public class WarpCommand extends CommandBase {
     @SubCommand("help")
     @HasPermission("lmke-warps.warp")
     public void help(CommandSender sender, Command command, String[] args) {
-        List<String> warps = locale.getStringList("warp.help");
-        String header = locale.getString("common.header");
+        List<String> warps = MessageLocaleManager.getConfig().getStringList("warp.help");
+        String header = MessageLocaleManager.getTextRaw("common.header");
 
         sender.sendMessage(header);
         sender.sendMessage(warps.toArray(new String[0]));
@@ -42,31 +41,38 @@ public class WarpCommand extends CommandBase {
             double create = EconomyService.getWarpCreatePrice();
             double delete = EconomyService.getWarpDeletePrice();
 
-            String refund = locale.getString("common.refund");
+            String refund = MessageLocaleManager.getTextRaw("common.refund");
 
             String createPriceText = create >= 0 ? String.valueOf(create) : Math.abs(create) + " " + refund;
             String deletePriceText = delete >= 0 ? String.valueOf(delete) : Math.abs(delete) + " " + refund;
 
+            if (sender.hasPermission("lmke-warps.bypass.economy")) {
+                createPriceText = MessageLocaleManager.getTextRaw("common.free");
+                deletePriceText = MessageLocaleManager.getTextRaw("common.free");
+            }
+
             sender.sendMessage("");
 
-            sender.sendMessage(String.format(locale.getString("warp.help_economy.create"), createPriceText));
-            sender.sendMessage(String.format(locale.getString("warp.help_economy.delete"), deletePriceText));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("warp.help_economy.create"), createPriceText));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("warp.help_economy.delete"), deletePriceText));
 
             int forFree = ConfigManager.getConfig().getInt("warp.for_free");
 
             if (forFree > 0) {
                 int hasLeft = Math.max(forFree - warpCount, 0);
 
-                String msg = locale.getString("common.for_free") + hasLeft + "/" + forFree;
+                String msg = MessageLocaleManager.getTextRaw("common.for_free") + hasLeft + "/" + forFree;
                 sender.sendMessage(msg);
             }
         }
 
         int limit = ConfigManager.getConfig().getInt("warp.limit");
 
-        if (limit > 0) {
+        if (limit > 0 && !sender.hasPermission("lmke-warps.bypass.limit")) {
             int hasLeft = Math.max(limit - warpCount, 0);
-            sender.sendMessage(String.format(locale.getString("common.limit"), hasLeft + "/" + limit));
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("common.limit"), hasLeft + "/" + limit));
+        } else if(sender.hasPermission("lmke-warps.bypass.limit")) {
+            sender.sendMessage(String.format(MessageLocaleManager.getTextRaw("common.limit"), MessageLocaleManager.getTextRaw("common.bypass")));
         }
     }
 
@@ -89,7 +95,7 @@ public class WarpCommand extends CommandBase {
         if (wp != null) {
             p.teleport(wp.location);
         } else {
-            p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.not_found"));
         }
     }
 
@@ -123,7 +129,7 @@ public class WarpCommand extends CommandBase {
 
         String count = "(" + wpList.size() + "/" + limit + ")";
 
-        p.sendMessage(locale.getString("common.prefix") + count + " " + String.join(", ", wpList));
+        p.sendMessage(MessageLocaleManager.getTextRaw("common.prefix") + count + " " + String.join(", ", wpList));
     }
 
     /**
@@ -136,12 +142,12 @@ public class WarpCommand extends CommandBase {
         Player p = (Player) sender;
 
         if (args.length < 1) {
-            p.sendMessage(MessageLocaleManager.getText("errors.missing_args"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.missing_args"));
             return;
         }
 
         if (DAL.getPlayerWarpPoint(args[0], p.getUniqueId()) != null) {
-            p.sendMessage(MessageLocaleManager.getText("errors.already_exists"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.already_exists"));
             return;
         }
 
@@ -152,15 +158,15 @@ public class WarpCommand extends CommandBase {
 
         // validate
         if (pattern != null && !args[0].matches(pattern)) {
-            String msg = String.format(MessageLocaleManager.getText("errors.invalid_requirements"), lengths, pattern);
-            p.sendMessage(MessageLocaleManager.getText("errors.invalid"));
+            String msg = String.format(MessageLocaleManager.getChatText("errors.invalid_requirements"), lengths, pattern);
+            p.sendMessage(MessageLocaleManager.getChatText("errors.invalid"));
             p.sendMessage(msg);
             return;
         }
 
         if (args[0].length() < minLength || args[0].length() >= maxLength) {
-            String msg = String.format(MessageLocaleManager.getText("errors.invalid_requirements"), lengths, pattern);
-            p.sendMessage(MessageLocaleManager.getText("errors.invalid"));
+            String msg = String.format(MessageLocaleManager.getChatText("errors.invalid_requirements"), lengths, pattern);
+            p.sendMessage(MessageLocaleManager.getChatText("errors.invalid"));
             p.sendMessage(msg);
             return;
         }
@@ -169,7 +175,7 @@ public class WarpCommand extends CommandBase {
         int limit = ConfigManager.getConfig().getInt("warp.limit");
 
         if (warpCount >= limit && limit > 0 && !p.hasPermission("lmke-warps.bypass.limit")) {
-            p.sendMessage(MessageLocaleManager.getText("errors.limit_reached"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.limit_reached"));
             return;
         }
 
@@ -179,7 +185,7 @@ public class WarpCommand extends CommandBase {
             if (EconomyService.playerHasMoney(p, price)) {
                 EconomyService.modifyBalance(p, price);
             } else {
-                p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
+                p.sendMessage(MessageLocaleManager.getChatText("errors.no_money"));
                 return;
             }
         }
@@ -188,7 +194,7 @@ public class WarpCommand extends CommandBase {
 
         Database.getRepo(WarpPoint.class).insert(wp);
 
-        p.sendMessage(MessageLocaleManager.getText("warp.created"));
+        p.sendMessage(MessageLocaleManager.getChatText("warp.created"));
     }
 
     /**
@@ -201,7 +207,7 @@ public class WarpCommand extends CommandBase {
         Player p = (Player) sender;
 
         if (args.length < 1) {
-            p.sendMessage(MessageLocaleManager.getText("errors.missing_args"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.missing_args"));
             return;
         }
 
@@ -214,7 +220,7 @@ public class WarpCommand extends CommandBase {
                 if (EconomyService.playerHasMoney(p, price)) {
                     EconomyService.modifyBalance(p, price);
                 } else {
-                    p.sendMessage(MessageLocaleManager.getText("errors.no_money"));
+                    p.sendMessage(MessageLocaleManager.getChatText("errors.no_money"));
                     return;
                 }
             }
@@ -222,9 +228,9 @@ public class WarpCommand extends CommandBase {
             ObjectRepository<WarpPoint> repo = Database.getRepo(WarpPoint.class);
             repo.remove(ObjectFilters.eq("_id", wp.id));
 
-            p.sendMessage(MessageLocaleManager.getText("warp.deleted"));
+            p.sendMessage(MessageLocaleManager.getChatText("warp.deleted"));
         } else {
-            p.sendMessage(MessageLocaleManager.getText("errors.not_found"));
+            p.sendMessage(MessageLocaleManager.getChatText("errors.not_found"));
         }
     }
 }

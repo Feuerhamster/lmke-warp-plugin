@@ -8,11 +8,15 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 
 public class MessageLocaleManager {
     private static final Plugin plugin = LMKEWarps.getPlugin(LMKEWarps.class);
     private static FileConfiguration content;
+
+    private static FileConfiguration fallbackContent;
+
     private static final String[] locales = { "de", "en" };
 
     public static void setup() {
@@ -37,13 +41,26 @@ public class MessageLocaleManager {
     public static void loadMessageFile(String locale) {
         File file = new File(plugin.getDataFolder().getAbsolutePath(), locale + ".messages.yml");
         content = YamlConfiguration.loadConfiguration(file);
+
+        InputStreamReader fallback = new InputStreamReader(plugin.getResource(locale + ".messages.yml"));
+        fallbackContent = YamlConfiguration.loadConfiguration(fallback);
     }
 
     public static FileConfiguration getConfig() {
         return content;
     }
 
-    public static String getText(String key) {
-        return content.getString("common.prefix") + content.getString(key);
+    public static String getChatText(String key) {
+        return content.getString("common.prefix") + getTextRaw(key);
+    }
+
+    public static String getTextRaw(String key) {
+        String text = content.getString(key);
+
+        if (text == null) {
+            return fallbackContent.getString(key);
+        }
+
+        return text;
     }
 }

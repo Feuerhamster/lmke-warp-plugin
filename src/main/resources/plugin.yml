@@ -3,16 +3,45 @@ version: '${project.version}'
 main: dev.lmke.mc.warps.LMKEWarps
 api-version: 1.15
 description: Highly customizable warp plugin with economy support and map integrations
+author: Feuerhamster
 website: lmke.dev
 commands:
   warp:
     usage: "/warp <create|delete|help|<name>> [name]"
     description: Warp command
+    permission: lmke-warps.warp
   poi:
     usage: "/poi <create|delete|help|<name>> [name]"
     description: Point of interest command
+    permission: lmke-warps.poi
 
-softdepend:
-  - BlueMap
-  - Vault
-  - dynmap
+permissions:
+  lmke-warps.warp:
+    default: true
+    children:
+      lmke-warps.warp.list: true
+      lmke-warps.warp.create: true
+      lmke-warps.warp.delete: true
+
+  lmke-warps.poi:
+    default: true
+    children:
+      lmke-warps.poi.list: true
+      lmke-warps.poi.create: true
+      lmke-warps.poi.delete: true
+
+  lmke-warps.admin:
+    description: Delete poi's that aren't yours
+
+  lmke-warps.bypass:
+    children:
+      lmke-warps.bypass.economy: false
+      lmke-warps.bypass.limit: false
+
+  lmke-warps.sign:
+    default: true
+    children:
+      lmke-warps.sign.create: true
+      lmke-warps.sign.use: true
+
+softdepend: [BlueMap, Vault, dynmap]

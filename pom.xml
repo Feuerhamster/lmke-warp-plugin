@@ -9,9 +9,9 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Warps</name>
+    <name>lmke-warps</name>
 
-    <description>Warp plugin with economy support</description>
+    <description>Highly customizable warp plugin with economy support and map integrations</description>
     <properties>
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,14 +44,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <outputDirectory>D:\Minecraft 1.15.2 Server\plugins</outputDirectory>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -106,6 +98,7 @@
             <groupId>com.github.BlueMap-Minecraft</groupId>
             <artifactId>BlueMapAPI</artifactId>
             <version>v2.2.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

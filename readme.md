@@ -3,6 +3,8 @@
 
 > A simple and clean but also feature rich warp plugin with economy support
 
+![lmke warps banner](/lmke-warps-banner.png)
+
 ## Features
 - Private warps
 - Public warps (poi's = points of interest)
@@ -52,10 +54,10 @@ For more details on configuration, please see [config.yml](/src/main/resources/c
 
 ## Permissions
 
-- `lmke-warps.warps` Help page and teleport to warp
-- `lmke-warps.warps.list`
-- `lmke-warps.warps.create`
-- `lmke-warps.warps.delete`
+- `lmke-warps.warp` Help page and teleport to warp
+- `lmke-warps.warp.list`
+- `lmke-warps.warp.create`
+- `lmke-warps.warp.delete`
 
 - `lmke-warps.poi` Help page and teleport to poi
 - `lmke-warps.poi.list`

@@ -27,7 +27,7 @@ public class DynmapService {
         Bukkit.getScheduler().runTaskAsynchronously(LMKEWarps.getPlugin(LMKEWarps.class), bukkitTask -> {
             System.out.println("[lmke-warps] Loading all poi's into dynmap...");
 
-            String label = MessageLocaleManager.getText("map.marker_set_label");
+            String label = MessageLocaleManager.getTextRaw("map.marker_set_label");
 
             markerset = dapi.getMarkerAPI().createMarkerSet(markerSetKey, label, dapi.getMarkerAPI().getMarkerIcons(), false);
 
