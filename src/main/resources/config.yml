@@ -3,7 +3,7 @@
 # -----------------------
 
 # Change the language of the messages (eg. select what message file to use)
-locale: 'de'
+locale: 'en'
 
 # Validate the names of warps and pois on creation
 validation:
@@ -28,7 +28,7 @@ warp:
   enable: true
   enable_economy: false
   create_cost: 50
-  delete_cost: -100
+  delete_cost: -50
   for_free: 1
   limit: 5
 
