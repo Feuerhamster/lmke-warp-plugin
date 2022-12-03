@@ -46,7 +46,7 @@ public final class LMKEWarps extends JavaPlugin {
             getLogger().info("Vault plugin not found. Proceeding without economy support!");
         }
 
-        if (getConfig().getBoolean("map_support.enable_bluemap")) {
+        if (getConfig().getBoolean("map_support.enable_bluemap") && getServer().getPluginManager().getPlugin("BlueMap") != null) {
             BlueMapAPI.onEnable(BlueMapService::setup);
         }
 
