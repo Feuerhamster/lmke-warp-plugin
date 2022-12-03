@@ -15,19 +15,25 @@
 - Limit how many warps and poi
 - Input validation for warp/poi names
 
-### Private warps
+### Private & public warps
 Private warps are per player and only the player who created it can teleport to it.
 It's useful for example to set homes.
 
-### Public warps
 Public warps, or poi's (points of interest) are global and everyone can teleport to them.
 It's useful for example if a player has a shop and want other players to visit their shop.
 
 This type of warps can have **teleport signs**. Simply create a sign and write `[poi]` in the first line and the name of the poi in the second line.
 
+### Map integrations
+This plugin supports DynMap and BlueMap to display points of interest on your server's map.
+If you have installed one of these plugins on your server, it should work automatically.
+
+### Economy support
+You can configure costs for creating (and deleting) warps and poi's.
+For this to work, you need to have [Vault](https://www.spigotmc.org/resources/vault.34315/) and an economy plugin installed on your server.
+
 ## Installation & Configuration
 Just download the latest build from the [releases](/releases) and paste it into your plugins directory.
-If you want to have economy support, you will need [Vault](https://www.spigotmc.org/resources/vault.34315/) and a compatible economy plugin.
 
 For more details on configuration, please see [config.yml](/src/main/resources/config.yml)
 
