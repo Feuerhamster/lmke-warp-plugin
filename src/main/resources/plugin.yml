@@ -1,7 +1,7 @@
 name: lmke-warps
 version: '${project.version}'
 main: dev.lmke.mc.warps.LMKEWarps
-api-version: 1.15
+api-version: 1.21
 description: Highly customizable warp plugin with economy support and map integrations
 author: Feuerhamster
 website: lmke.dev

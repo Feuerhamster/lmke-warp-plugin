@@ -6,14 +6,14 @@
 
     <groupId>dev.lmke.mc.warps</groupId>
     <artifactId>lmke-warps</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
 
     <name>lmke-warps</name>
 
     <description>Highly customizable warp plugin with economy support and map integrations</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>lmke.dev</url>
@@ -68,6 +68,10 @@
             <url>https://jitpack.io</url>
         </repository>
         <repository>
+            <id>codemc-creatorfromhell</id>
+            <url>https://repo.codemc.io/repository/creatorfromhell/</url>
+        </repository>
+        <repository>
             <id>repo.mikeprimm.com</id>
             <url>https://repo.mikeprimm.com/</url>
         </repository>
@@ -77,7 +81,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.21.8-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -88,9 +92,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+            <groupId>net.milkbowl.vault</groupId>
+            <artifactId>VaultUnlockedAPI</artifactId>
+            <version>2.15</version><!-- Validate this is the most recent version from the CI -->
             <scope>provided</scope>
         </dependency>
 

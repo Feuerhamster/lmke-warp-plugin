@@ -1,5 +1,5 @@
 # LMKE Warps Spigot Plugin
-**Game Version:** 1.15
+**Game Version:** 1.21.*
 
 > A simple and clean but also feature rich warp plugin with economy support
 
